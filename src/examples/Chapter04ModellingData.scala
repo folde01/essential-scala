@@ -25,10 +25,15 @@ case class Foo(
               override val age: Long = 1
                ) extends Visitor
 
+
+
+
 object Chapter04ModellingData extends App {
+
   def older(v1: Visitor, v2: Visitor): Boolean =
     v1.createdAt.before(v2.createdAt)
 
   val res = older(Anonymous("1"), User("2", "test@example.com"))
   println(res)
+
 }
