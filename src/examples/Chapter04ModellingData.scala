@@ -1,7 +1,7 @@
 package examples
 import java.util.Date
 
-trait Visitor {
+sealed trait Visitor {
   def id: String
   // Unique id assigned to each user
   def createdAt: Date // Date this user first visited the site
@@ -25,6 +25,7 @@ case class Foo(
               override val age: Long = 1
                ) extends Visitor
 
+// case class Hamburger() extends Food // error because Food is a sealed trait defined in another file
 
 
 
@@ -36,4 +37,8 @@ object Chapter04ModellingData extends App {
   val res = older(Anonymous("1"), User("2", "test@example.com"))
   println(res)
 
+  def missingCase(v: Visitor) =
+    v match {
+      case User(_, _, _) => "Got a user"
+    }
 }
