@@ -1,5 +1,7 @@
 package examples.ch4modelling.s5workingWithData
 
+import examples.ch4modelling.s5workingWithData.example4_5_3_patmatpat.Food
+
 
 sealed trait A {
   def foo: String = "It's A!"
@@ -72,10 +74,11 @@ object example4_5_3_patmatpat {
   case object Antelope extends Food
   case object Licorice extends Food
   case object TigerFood extends Food
+  case class CatFood(food: String) extends Food
 
   sealed trait Feline {
-    def dinner(feline: Feline): Food = feline match {
-      case Cat(food: Food) => food
+    def dinner: Food = this match {
+      case Cat(favFood: String) => CatFood(favFood)
       case Lion => Antelope
       case Tiger => TigerFood
       case Panther => Licorice
@@ -84,7 +87,7 @@ object example4_5_3_patmatpat {
   final case object Lion extends Feline
   final case object Tiger extends Feline
   final case object Panther extends Feline
-  final case class Cat(food: Food) extends Feline
+  final case class Cat(favFood: String) extends Feline
 
 }
 
@@ -93,9 +96,26 @@ object example4_5_3_polymorphism {
   case object Antelope extends Food
   case object Licorice extends Food
   case object TigerFood extends Food
+  case class CatFood(food: String) extends Food
 
   sealed trait Feline {
-    def
+    def dinner: Food
+  }
+
+  case class Cat(favFood: String) extends Feline {
+    override def dinner: Food = CatFood(favFood)
+  }
+
+  final case object Lion extends Feline {
+    override def dinner: Food = Antelope
+  }
+
+  final case object Tiger extends Feline {
+    override def dinner: Food = TigerFood
+  }
+
+  final case object Panther extends Feline {
+    override def dinner: Food = Licorice
   }
 }
 
