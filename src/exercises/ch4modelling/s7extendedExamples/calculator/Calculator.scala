@@ -7,7 +7,12 @@ object Calculator extends App {
     def eval: Calculation = this match {
       case Number(value) => Success(value)
 
-      case SquareRoot(ex) => ???
+      case SquareRoot(ex) => ex.eval match {
+        case Failure(msg) => Failure(msg)
+        case Success(result) =>
+          if (result < 0) Failure("Can't sqrt a neg")
+          else Success(Math.sqrt(result))
+      }
 
       case Division(left: Expression, right: Expression) => right.eval match {
         case Failure(msg) => Failure(msg)
