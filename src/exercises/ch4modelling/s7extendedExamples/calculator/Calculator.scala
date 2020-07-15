@@ -6,11 +6,18 @@ object Calculator extends App {
   sealed trait Expression {
     def eval: Calculation = this match {
       case Number(value) => Success(value)
-      case Division(left: Expression, right: Expression) => right.eval match {
-        case Success(0) => Failure("Division by zero")
-        case _ => Success(left.eval / right.eval)
-      }
+
       case SquareRoot(ex) => ???
+
+      case Division(left: Expression, right: Expression) => right.eval match {
+        case Failure(msg) => Failure(msg)
+        case Success(result1) =>
+          if (result1 == 0) Failure("Div by 0")
+          else left.eval match {
+            case Failure(msg) => Failure(msg)
+            case Success(result2) => Success(result2 / result1)
+        }
+      }
 
       case Addition(left, right) => left.eval match {
         case Failure(msg) => Failure(msg)
