@@ -52,24 +52,24 @@ object Calculator extends App {
   final case class Failure(msg: String) extends Calculation
 
 
-  val t1 = Number(5)
-  assert(t1.eval == 5)
-  val t2 = Number(15)
-  assert(t2.eval == 15)
-  val t3 = Addition(t1, t2)
-  assert(t3.eval == 20)
-  val t4 = Subtraction(t3, t1)
-  assert(t4.eval == 15)
+//  val t1 = Number(5)
+//  assert(t1.eval == 5)
+//  val t2 = Number(15)
+//  assert(t2.eval == 15)
+//  val t3 = Addition(t1, t2)
+//  assert(t3.eval == 20)
+//  val t4 = Subtraction(t3, t1)
+//  assert(t4.eval == 15)
 
   assert(
     Addition(
       SquareRoot(Number(-1.0)),
       Number(2.0)
     ).eval ==
-    Failure("Square root of negative number"))
+    Failure("Can't sqrt a neg"))
 
   assert(Addition(SquareRoot(Number(4.0)), Number(2.0)).eval == Success (4.0))
-  assert(Division(Number(4), Number(0)).eval == Failure("Division by zero"))
+  assert(Division(Number(4), Number(0)).eval == Failure("Div by 0"))
 
   println("finished tests")
 }
