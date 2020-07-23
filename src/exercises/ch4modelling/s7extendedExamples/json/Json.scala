@@ -32,7 +32,7 @@ JsonObject = {} | { Members }
 
 Members = JsonString: Json | Members, JsonString : Json
 
-JsonArray = [] | [ ArrayElems ]
+JsonList = [] | [ ArrayElems ]
 
 ArrayElems = Json | ArrayElems, Json
 
@@ -47,4 +47,12 @@ object Part2 {
   final case class Bool(value: Boolean) extends Json
   final case class JsonNum(value: Int) extends Json
   final case class JsonString(value: String) extends Json
+
+  sealed trait JsonList extends Json
+  final case class JsonPair(head: Json, tail: JsonList) extends JsonList
+  final case object ListEnd extends JsonList
+
+  sealed trait JsonObject extends Json
+  final case class JsonObjectPair(key: String, value: Json, tail: JsonObject) extends JsonObject
+  final case object ObjectEnd extends JsonObject
 }
