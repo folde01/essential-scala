@@ -43,35 +43,84 @@ object Part2 {
 
   // Json.toString
 
-case object JsonFormat {
-  def quote(string: String): String = s""""$string""""
+object Part3Step1 {
+
+  // just print the base cases
+  sealed trait Json {
+    private def quote(string: String): String = s""""$string""""
+
+    override def toString: String =
+      this match {
+        case JsonString(value) => quote(value)
+        case JsonNum(value) => quote(value.toString)
+        case JsonBool(value) => quote(value.toString)
+      }
+  }
+
+  final case class JsonBool(value: Boolean) extends Json
+
+  final case class JsonNum(value: Double) extends Json
+
+  final case class JsonString(value: String) extends Json
+
+  sealed trait JsonList extends Json
+
+  final case class JsonPair(head: Json, tail: JsonList) extends JsonList
+
+  final case object ListEnd extends JsonList
+
+  sealed trait JsonObject extends Json
+
+  final case class JsonObjectPair(key: String, value: Json, tail: JsonObject) extends JsonObject
+
+  final case object ObjectEnd extends JsonObject
+
+
+  object Tests extends App {
+
+    val jsonTrue = JsonBool(true)
+    println(jsonTrue)
+
+    val json1 = JsonNum(1.0)
+    println(json1)
+
+    val jsonFoo = JsonString("foo")
+    println(jsonFoo)
+  }
+
 }
 
 sealed trait Json {
+  private def quote(string: String): String = s""""$string""""
+
   override def toString: String =
     this match {
-      case JsonString(value) => JsonFormat.quote(value)
-      case JsonNum(value) => JsonFormat.quote(value.toString)
-      case JsonBool(value) => JsonFormat.quote(value.toString)
+      case JsonString(value) => quote(value)
+      case JsonNum(value) => quote(value.toString)
+      case JsonBool(value) => quote(value.toString)
+
+      //case ListEnd => "]"
+
+      case JsonPair(head, tail) => head match {
+        case ListEnd => tail match {
+          case ListEnd => "[]"
+        }
+      }
+
+      case JsonObjectPair(key, value, tail) => ???
     }
 }
 
 final case class JsonBool(value: Boolean) extends Json
-
 final case class JsonNum(value: Double) extends Json
-
 final case class JsonString(value: String) extends Json
 
 sealed trait JsonList extends Json
-
 final case class JsonPair(head: Json, tail: JsonList) extends JsonList
-
 final case object ListEnd extends JsonList
 
 sealed trait JsonObject extends Json
-
 final case class JsonObjectPair(key: String, value: Json, tail: JsonObject) extends JsonObject
-
 final case object ObjectEnd extends JsonObject
 
 
@@ -86,9 +135,31 @@ object Tests extends App {
   val jsonFoo = JsonString("foo")
   println(jsonFoo)
 
+//  val jsonListEnd = ListEnd
+//  println(jsonListEnd)
+
+  val jsonPairEmpty = JsonPair(ListEnd, ListEnd)
+  println("jsonPairEmpty: " + jsonPairEmpty)
+
   /*
-  JsonPair (JsonString ("a string"), JsonPair (JsonNum (1.0), JsonPair (JsonBool
-  (true), ListEnd) ) ).toString
+
+  JsonPair (
+            HEAD: ListEnd,
+            TAIL: ListEnd
+           )
+  // []
+
+  JsonPair (
+            HEAD: JsonString ("a string"),
+            TAIL: JsonPair (
+                            HEAD: JsonNum (1.0),
+                            TAIL: JsonPair (
+                                            HEAD: JsonBool (true),
+                                            TAIL: ListEnd
+                                            )
+                            )
+            ).toString
+
   // res0: String = ["a string", 1.0, true]
   JsonObjectPair (
     "a", JsonPair (JsonNum (1.0), JsonPair (JsonNum (2.0), JsonPair (JsonNum
