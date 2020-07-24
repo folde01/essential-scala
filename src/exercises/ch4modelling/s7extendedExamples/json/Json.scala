@@ -43,12 +43,16 @@ object Part2 {
 
   // Json.toString
 
+case object JsonFormat {
+  def quote(string: String): String = s""""$string""""
+}
+
 sealed trait Json {
   override def toString: String =
     this match {
-      case JsonString(value) => value
-      case JsonNum(value) => value.toString
-      case JsonBool(value) => value.toString
+      case JsonString(value) => JsonFormat.quote(value)
+      case JsonNum(value) => JsonFormat.quote(value.toString)
+      case JsonBool(value) => JsonFormat.quote(value.toString)
     }
 }
 
@@ -70,8 +74,19 @@ final case class JsonObjectPair(key: String, value: Json, tail: JsonObject) exte
 
 final case object ObjectEnd extends JsonObject
 
-object Tests {
 
+object Tests extends App {
+
+  val jsonTrue = JsonBool(true)
+  println(jsonTrue)
+
+  val json1 = JsonNum(1.0)
+  println(json1)
+
+  val jsonFoo = JsonString("foo")
+  println(jsonFoo)
+
+  /*
   JsonPair (JsonString ("a string"), JsonPair (JsonNum (1.0), JsonPair (JsonBool
   (true), ListEnd) ) ).toString
   // res0: String = ["a string", 1.0, true]
@@ -90,6 +105,7 @@ object Tests {
     )
   ).toString
   
-}
-
 // res1: String = {"a": [1.0, 2.0, 3.0], "b":
+
+   */
+}
