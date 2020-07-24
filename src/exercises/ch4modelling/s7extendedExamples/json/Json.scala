@@ -44,7 +44,12 @@ object Part2 {
   // Json.toString
 
 sealed trait Json {
-  override def toString: String = "foo"
+  override def toString: String =
+    this match {
+      case JsonString(value) => value
+      case JsonNum(value) => value.toString
+      case JsonBool(value) => value.toString
+    }
 }
 
 final case class JsonBool(value: Boolean) extends Json
