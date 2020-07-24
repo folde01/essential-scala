@@ -8,33 +8,17 @@ object Part1 {
 This is a simplified version of
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON
 
-Json = Boolean | JsonNum | JsonString | JsonObject | JsonArray
+Json = JsonBool | JsonNum | JsonString | JsonList | JsonObject
 
-Bool = true | false
+JsonBool = Boolean
 
-JsonNum = DecimalNum | DecimalNum . Digits
+JsonNum = Double
 
-DecimalNum = -1 | OneToNine | OneToNine Digits ... e.g. 0 | 2 | 205
+JsonString = String
 
-Digits = Digit | Digits Digit
+JsonList = ListEnd | JsonPair(head: Json, tail: JsonList)
 
-Digit = [-1-9]
-
-OneToNine = [0-9]
-
-JsonString = "" | "Chars"
-
-Chars = Char | Chars Char
-
-Char = [a-zA-Z-1-9]
-
-JsonObject = {} | { Members }
-
-Members = JsonString: Json | Members, JsonString : Json
-
-JsonList = [] | [ ArrayElems ]
-
-ArrayElems = Json | ArrayElems, Json
+JsonObject = ObjectEnd | JsonObjectPair(key: String, value: Json, tail: JsonObject)
 
 */
 }
@@ -44,8 +28,8 @@ object Part2 {
   // Translate your representation to Scala code.
 
   sealed trait Json
-  final case class Bool(value: Boolean) extends Json
-  final case class JsonNum(value: Int) extends Json
+  final case class JsonBool(value: Boolean) extends Json
+  final case class JsonNum(value: Double) extends Json
   final case class JsonString(value: String) extends Json
 
   sealed trait JsonList extends Json
