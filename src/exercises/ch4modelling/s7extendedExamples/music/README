@@ -1,0 +1,25 @@
+Expression ::= Addition left:Expression right:Expression
+| Subtraction left:Expression right:Expression
+| Division left:Expression right:Expression
+| SquareRoot value:Expression
+| Number value:Int
+
+https://pages.mtu.edu/~suits/notefreqs.html
+
+ToneAlias: A A#/Bb B C C#/Db D D#/Eb E F#/Gb G G#/Ab 
+
+Tone: A A#/Bb B C C#/Db D D#/Eb E F#/Gb G G#/Ab 
+
+Pitch: Frequency Wavelength  
+
+Length: 1, 3/2, 1/2, 1/4, 1/8, 1/16
+
+TimeSignature:
+
+Note: Play Rest
+
+Octave: 0-8
+
+Play: Tone Octave Length  
+
+Rest: Length 
