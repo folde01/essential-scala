@@ -69,8 +69,6 @@ sealed trait Accidental extends NoteElement
 
 
 
-
-
 object C extends Tone {
   val letter = 'C'
   val octave4Frequency = 261.63

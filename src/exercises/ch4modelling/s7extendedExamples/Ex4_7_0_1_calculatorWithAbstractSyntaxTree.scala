@@ -4,7 +4,7 @@ sealed trait Expression {
   def eval: Calculation = this match {
     case Addition(left, right) => left.eval match {
       case Failure(reason) => Failure(reason)
-      case Success(x) => 
+//      case Success(x) =>
     }
     case Number(value) => Success(value)
     case SquareRoot(Number(n)) if n < 0 => Failure("square root of negative number")
@@ -12,10 +12,10 @@ sealed trait Expression {
       case Number(0) => Failure("division by zero")
       case Number(r) => left match {
         case Number(l) => Success(l/r)
-        case expression: Expression => expression.eval  ...
+//        case expression: Expression => expression.eval  ...
       }
     }
-    case Subtraction(left, right) => left.eval - right.eval
+//    case Subtraction(left, right) => left.eval - right.eval
   }
 }
 final case class Addition(left: Expression, right: Expression) extends Expression

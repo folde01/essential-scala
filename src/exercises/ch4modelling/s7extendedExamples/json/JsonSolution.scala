@@ -54,19 +54,22 @@ object json extends App {
   val jsonFoo = JsString("foo")
   println("jsonFoo: " + jsonFoo.print)
 
+  val jsonBar = JsString("bar")
+  println("jsonBar: " + jsonBar.print)
+
   val jsonListEnd = SeqEnd
   println("jsonListEnd: " + jsonListEnd.print)
 
   val jsonPairEmpty = SeqCell(SeqEnd, SeqEnd)
   println("jsonPairEmpty: " + jsonPairEmpty.print)
 
-  val jsonPairOneElem = SeqCell(JsString("a"), SeqEnd)
+  val jsonPairOneElem = SeqCell(jsonFoo, SeqEnd)
   println("jsonPairOneElem: " + jsonPairOneElem.print)
 
-  val jsonPairOneElem2 = SeqCell(JsString("b"), SeqEnd)
+  val jsonPairOneElem2 = SeqCell(jsonBar, SeqEnd)
   println("jsonPairOneElem2: " + jsonPairOneElem2.print)
 
-  val jsonPairTwoElem = SeqCell(jsonPairOneElem, jsonPairOneElem2)
+  val jsonPairTwoElem = SeqCell(jsonFoo, jsonPairOneElem2)
   println("jsonPairTwoElem: " + jsonPairTwoElem.print)
 
 }

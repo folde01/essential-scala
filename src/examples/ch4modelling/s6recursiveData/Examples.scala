@@ -22,9 +22,19 @@ object foo extends App {
   val a = Pair(1, b)
 
   val example: Pair = Pair(1, Pair(2, Pair(3, End) ))
+  println("tests...")
   assert(sum(example) == 6)
   assert(sum(example.tail) == 5)
   assert(sum(End) == 0)
+  assert(sumTR(example, 0) == 6)
+  assert(sumTR(example.tail, 0) == 5)
+  assert(sumTR(End, 0) == 0)
+  println("done")
+  println
+
+  println("val example: Pair = Pair(1, Pair(2, Pair(3, End) ))")
+  println("sumTR2(example, 0)...\n")
+  sumTR2(example, 0)
 
   // @tailrec
   def sum(list: IntList): Int = list match {
@@ -32,9 +42,28 @@ object foo extends App {
     case Pair(head, tail) => head + sum(tail)
   }
 
+  def sum2(list: IntList): Int = list match {
+    case End => 0
+    case Pair(head, tail) => head + sum2(tail)
+  }
+
   @tailrec
-  def sumTail(list: IntList, total: Int): Int = list match {
+  def sumTR(list: IntList, total: Int): Int = list match {
     case End => total
-    case Pair(head, tail) => sumTail(tail, head + total)
+    case Pair(head, tail) => sumTR(tail, head + total)
+  }
+
+  @tailrec
+  def sumTR2(list: IntList, total: Int): Int = list match {
+    case End => {
+      println("total: " + total)
+      total
+    }
+    case Pair(head, tail) => {
+      println("head: " + head)
+      println("tail: " + tail)
+      sumTR2(tail, head + total)
+    }
   }
 }
+//val example: Pair = Pair(1, Pair(2, Pair(3, End) ))
