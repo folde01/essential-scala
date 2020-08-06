@@ -1,3 +1,5 @@
+import org.w3c.dom.html.HTMLButtonElement
+
 sealed trait Music
 
 sealed trait Melody extends Music
@@ -71,16 +73,37 @@ sealed trait Accidental extends NoteElement
 
 
 
-object C extends Tone {
+// static object created in memory at app launch. GC ignores.
+case object C extends Tone {
   val letter = 'C'
   val octave4Frequency = 261.63
   val octave4Wavelength = 131.87
 }
 
-object D extends Tone {
-  val letter = 'D'
-  val octave4Frequency = 293.66
-  val octave4Wavelength = 117.48
+
+def foo(tone: Tone): String = {
+  tone match {
+        case C => "cccc"
+        case D(_,_,_) => "dddd"
+      }
+}
+
+
+// GC'd. Instantiable. Pattern matchable. Use of lots of instances.
+case class D(
+              letter: Char = 'D',
+              octave4Frequency: Double = 293.66,
+              octave4Wavelength: Double = 117.48
+            ) extends Tone
+// case object Dsharp extends D
+
+case class E() extends Tone {
+  def letter = 'E'
+
+  def octave4Frequency = 1235
+
+  def octave4Wavelength = 1222
+
 }
 
 case object Flat extends Accidental
