@@ -1,5 +1,7 @@
 package examples.ch4modelling.s3modellingDataWithTraits
 
+import exercises.ch4modelling.s4sumType.Color
+
 //              and              or
 //              ------------     -------------
 // has-a        product type
@@ -75,5 +77,36 @@ sealed trait ElectricBus {
 }
 final class BatteryBus(val powerSource: Battery) extends ElectricBus
 final class FuelCellBus(val powerSource: FuelCell) extends ElectricBus
+
+
+case class A(b: B, c: C)
+
+//case class Human(color: Color, bloodType: BloodType)
+
+sealed trait BloodType
+final case object A extends BloodType
+final case object B extends BloodType
+final case object O extends BloodType
+
+trait Human2 {
+  def eyecolor: Color
+  def bloodType: BloodType
+}
+
+trait Zombie {
+  def eyecolor: Color
+}
+
+case class LivingHuman(eyecolor: Color, bloodType: BloodType) extends Human2
+case class WalkingDead(eyecolor: Color) extends Zombie
+
+sealed trait Feline {
+  def legs: Int = 4
+  def color: Color
+}
+final case class Lion(val color: Color) extends Feline
+final case class Tiger(val color: Color) extends Feline
+
+
 
 

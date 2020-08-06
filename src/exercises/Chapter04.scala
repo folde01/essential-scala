@@ -74,7 +74,6 @@ case class Square2(size: Double) extends Rectangular {
   def width = size
   def height = size
 }
-
 // 4.2.2.1 Printing Shapes
 
 trait ShapeSealed {

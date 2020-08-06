@@ -158,9 +158,10 @@ object Part3Step2 {
 }
 
 sealed trait Json {
-  private def quote(string: String): String = s""""$string""""
+  override def toString: String = {
 
-  override def toString: String =
+    def quote(string: String): String = s""""$string""""
+
     this match {
       case JsonString(value) => {
         println("--- JsonString: " ++ value)
@@ -177,6 +178,7 @@ sealed trait Json {
 
       case JsonObjectPair(key, value, tail) => ???
     }
+  }
 }
 
 final case class JsonBool(value: Boolean) extends Json
@@ -187,10 +189,18 @@ sealed trait JsonList extends Json
 
 final case class JsonPair(head: Json, tail: JsonList) extends JsonList {
   def pairToString: String = this match {
-    case JsonPair(ListEnd, ListEnd) => ""
-    case JsonPair(head, tail @ JsonPair(_, _)) =>
+    case JsonPair(ListEnd, ListEnd) => {
+      println("--- JsonPair(ListEnd, ListEnd)")
+      ""
+    }
+    case JsonPair(head, tail @ JsonPair(_, _)) => {
+      println("--- JsonPair(head, tail @ JsonPair(_, _))")
       s"${head.toString}, ${tail.toString}"
-    case JsonPair(head, ListEnd) => head.toString
+    }
+    case JsonPair(head, ListEnd) => {
+      println("--- JsonPair(head, ListEnd)")
+      head.toString
+    }
   }
 }
 
@@ -212,22 +222,25 @@ object Tests extends App {
   val jsonFoo = JsonString("foo")
   println("jsonFoo: " + jsonFoo)
 
+  val jsonBar = JsonString("bar")
+  println("jsonBar: " + jsonBar)
+
   val jsonListEnd = ListEnd
   println("jsonListEnd: " + jsonListEnd)
 
   val jsonPairEmpty = JsonPair(ListEnd, ListEnd)
   println("jsonPairEmpty: " + jsonPairEmpty)
 
-  val jsonPairOneElem = JsonPair(JsonString("a"), ListEnd)
+  val jsonPairOneElem = JsonPair(jsonFoo, ListEnd)
   println("jsonPairOneElem: " + jsonPairOneElem)
 
-  val jsonPairOneElem2 = JsonPair(JsonString("b"), ListEnd)
+  val jsonPairOneElem2 = JsonPair(jsonBar, ListEnd)
   println("jsonPairOneElem2: " + jsonPairOneElem2)
 
-  val jsonPairTwoElem = JsonPair(jsonPairOneElem, jsonPairOneElem2)
+  val jsonPairTwoElem = JsonPair(jsonFoo, jsonPairOneElem2)
   println("jsonPairTwoElem: " + jsonPairTwoElem)
-  /*
 
+  /*
   JsonPair (
             HEAD: ListEnd,
             TAIL: ListEnd
