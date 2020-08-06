@@ -62,7 +62,9 @@ sealed trait Tone extends NoteElement {
 
 final case class Octave(value: Int) extends NoteElement
 
-final case class Key(value: String) extends NoteElement
+final case class Key(value: String,
+                    signature: KeySignature
+                    ) extends NoteElement
 
 sealed trait Accidental extends NoteElement
 
@@ -86,3 +88,16 @@ case object Flat extends Accidental
 case object Sharp extends Accidental
 
 case object Natural extends Accidental
+
+sealed trait KeySignature
+final case class KeySignatureCell(
+                                 head: Accidental,
+                                 tail: KeySignature
+                                 )
+case object KeySignatureEnd
+
+
+/* Todo:
+sealed trait Octave4Frequencies
+sealed trait Octave4Wavelengths
+ */
