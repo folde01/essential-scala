@@ -12,8 +12,12 @@ object GenericList extends App {
   println(a)
 
 
-
-  sealed trait LinkedList[A]
+  sealed trait LinkedList[A] {
+    def length: Int = this match {
+      case LinkedEnd() => 0
+      case LinkedPair(head, tail) => 1 + tail.length
+    }
+  }
 
   final case class LinkedEnd[A]() extends LinkedList[A]
 
@@ -22,5 +26,9 @@ object GenericList extends App {
   val b = LinkedPair[Int](1, LinkedEnd())
   println(b)
 
-
+  val example = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
+  assert(example.length == 3)
+  assert(example.tail.length == 2)
+  assert(LinkedEnd().length == 0)
+  println("tests done")
 }

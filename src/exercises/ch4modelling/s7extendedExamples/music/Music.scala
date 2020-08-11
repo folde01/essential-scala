@@ -1,5 +1,6 @@
 import org.w3c.dom.html.HTMLButtonElement
 
+/*
 sealed trait Music
 
 sealed trait Melody extends Music
@@ -123,4 +124,7 @@ case object KeySignatureEnd
 /* Todo:
 sealed trait Octave4Frequencies
 sealed trait Octave4Wavelengths
+ */
+
+
  */
