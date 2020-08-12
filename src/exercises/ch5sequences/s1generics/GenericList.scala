@@ -12,9 +12,11 @@ object GenericList extends App {
   println(a)
 
 
+  sealed trait Result[A]
 
+  case class Success[A](result: A) extends Result[A]
 
-  // 5.1.3.1
+  case class Failure[A](reason: String) extends Result[A]
 
   sealed trait LinkedList[A] {
     def length: Int = this match {
@@ -31,34 +33,43 @@ object GenericList extends App {
       }
     }
 
-    def apply(n: Int): A = {
+    def apply(n: Int): Result[A] = {
       this match {
-        case LinkedEnd() => throw new Exception("bad things happened")
+        case LinkedEnd() => Failure("Index out of bounds")
         case LinkedPair(head, tail) =>
-          if (n == 0) head
-          else tail.apply(n-1)
+          if (n == 0) Success(head)
+          else tail.apply(n - 1)
       }
     }
   }
 
   final case class LinkedEnd[A]() extends LinkedList[A]
+
   final case class LinkedPair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
+
   val b = LinkedPair[Int](1, LinkedEnd())
   println(b)
 
-  // 5.1.3.2 part 3 - nth item
-  println("*** ex3")
-  val example3 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
-  println("0...")
-  assert(example3(0) == 1)
-  assert(example3(1) == 2)
-  assert(example3(2) == 3)
-  assert(try {
-    example3(3)
-    false
-  } catch {
-    case e: Exception => true
-  })
+  // part 4
+  val example4 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
+  assert(example4(0) == Success(1))
+  assert(example4(1) == Success(2))
+  assert(example4(2) == Success(3))
+  assert(example4(3) == Failure("Index out of bounds"))
+
+  //  // 5.1.3.2 part 3 - nth item
+  //  println("*** ex3")
+  //  val example3 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
+  //  println("0...")
+  //  assert(example3(0) == 1)
+  //  assert(example3(1) == 2)
+  //  assert(example3(2) == 3)
+  //  assert(try {
+  //    example3(3)
+  //    false
+  //  } catch {
+  //    case e: Exception => true
+  //  })
 
   // 5.1.3.2 part 1
 
@@ -79,6 +90,6 @@ object GenericList extends App {
   println("* end contains 0?")
   assert(LinkedEnd[Int]().contains(0) == false)
   // This should not compile
-//   example2.contains("not an Int")
+  //   example2.contains("not an Int")
 
 }
