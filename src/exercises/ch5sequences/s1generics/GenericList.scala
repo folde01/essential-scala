@@ -30,24 +30,48 @@ object GenericList extends App {
           else tail.contains(item)
       }
     }
+
+    def apply(n: Int): A = {
+      this match {
+        case LinkedEnd() => throw new Exception("bad things happened")
+        case LinkedPair(head, tail) =>
+          if (n == 0) head
+          else tail.apply(n-1)
+      }
+    }
   }
+
   final case class LinkedEnd[A]() extends LinkedList[A]
-  final case class LinkedPair[A](head: Int, tail: LinkedList[A]) extends LinkedList[A]
+  final case class LinkedPair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
   val b = LinkedPair[Int](1, LinkedEnd())
   println(b)
 
+  // 5.1.3.2 part 3 - nth item
+  println("*** ex3")
+  val example3 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
+  println("0...")
+  assert(example3(0) == 1)
+  assert(example3(1) == 2)
+  assert(example3(2) == 3)
+  assert(try {
+    example3(3)
+    false
+  } catch {
+    case e: Exception => true
+  })
+
   // 5.1.3.2 part 1
 
+  println("*** ex1")
   val example = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
   assert(example.length == 3)
   assert(example.tail.length == 2)
   assert(LinkedEnd().length == 0)
-  println("tests done")
 
   // 5.1.3.2 part 2
 
   println("ex2")
-  val example2 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd[Int]())))
+  val example2 = LinkedPair(1, LinkedPair(2, LinkedPair(3, LinkedEnd())))
   println("* contains 3?")
   assert(example2.contains(3) == true)
   println("* contains 4?")
