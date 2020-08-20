@@ -5,12 +5,23 @@ object Examples extends App {
 
   sealed trait IntList {
 
+//    object add1 {
+//      def apply(n: Int): Int = n + 1
+//    }
+//
+//    println(s"add1(2): ${add1(2)}")
+//
+//    val hi = () => "hi!"
+//    println(hi)
+//    println(hi())
+//
+//    val addd1 = (x: Int) => x + 1
+//    println(add1(3))
+//
+//    val summm = (x: Int, y: Int) => (x + y): Int
+//    println(summm(3, 4))
+//
 
-    def double: IntList =
-      this match {
-        case End => End
-        case Pair(hd, tl) => Pair(hd * 2, tl.double)
-      }
 
 
     def sum: Int = this match {
@@ -24,6 +35,21 @@ object Examples extends App {
       case End => end
       case Pair(hd, tl) => f(hd, tl.fold(end, f))
     }
+
+    def foldGeneric[A](end: A, f: (Int, A) => A): A = this match {
+      case End => end
+      case Pair(hd, tl) => f(hd, tl.foldGeneric(end, f))
+    }
+
+    def double: IntList =
+      this match {
+        case End => End
+        case Pair(hd, tl) => Pair(hd * 2, tl.double)
+      }
+
+    // case Pair(hd, tl) => f(hd, tl.foldGeneric(end, f))
+    //                      (hd, tl.foldGeneric(end, f)) => 2 * hd
+    def doubleFold: IntList = foldGeneric(End, (hd: Int, tl: IntList) => Pair(2 * hd, tl))
 
     def productFold: Int = fold(1, (hd, tailProduct) => hd * tailProduct)
 
@@ -41,6 +67,8 @@ object Examples extends App {
         case Pair(_, tl) => 1 + tl.length
       }
   }
+
+  // part 3: if e.g. length were rather in Pair and End, then lengthFold should refer to this.fold, with fold remaining in the trait? I think therefore better to use pattern matching.
 
   case object End extends IntList
 
@@ -87,21 +115,21 @@ object Examples extends App {
   println("assert(oneTwoThree.productFold == 6)")
   assert(oneTwoThree.productFold == 6)
 
-  object add1 {
-    def apply(n: Int): Int = n + 1
-  }
+  println("assert(End.double == End)")
+  assert(End.double == End)
+  println("assert(two.double == Pair(4, End))")
+  assert(two.double == Pair(4, End))
+  println("assert(oneTwo.double == Pair(2, Pair(4, End)))")
+  assert(oneTwo.double == Pair(2, Pair(4, End)))
 
-  println(s"add1(2): ${add1(2)}")
+  println("assert(End.doubleFold == End)")
+  assert(End.doubleFold == End)
+  println("assert(two.doubleFold == Pair(4, End))")
+  assert(two.doubleFold == Pair(4, End))
+  println("assert(oneTwo.doubleFold == Pair(2, Pair(4, End)))")
+  println(s"oneTwo.doubleFold: ${oneTwo.doubleFold}")
+  assert(oneTwo.doubleFold == Pair(2, Pair(4, End)))
 
-  val hi = () => "hi!"
-  println(hi)
-  println(hi())
-
-  val addd1 = (x: Int) => x + 1
-  println(add1(3))
-
-  val sum = (x: Int, y: Int) => (x + y): Int
-  println(sum(3, 4))
 
 
 }
